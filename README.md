@@ -112,29 +112,67 @@ CONFIABILIDAD: Máxima
 
 ## Setup
 
+### 🔑 Lo único que necesitás antes de correr
+
+Un **Access Token de prueba** de MercadoPago:
+
+1. Entrá a [https://www.mercadopago.com.ar/developers/panel/app](https://www.mercadopago.com.ar/developers/panel/app)
+2. Seleccioná tu aplicación → **Credenciales de prueba**
+3. Copiá el **Access Token** (empieza con `TEST-`)
+
+> El token de tarjeta se genera automáticamente — no hace falta configurar nada más.
+
+---
+
 ### 🚀 Instalación y Ejecución
 
 ```bash
-# 1. Crear y activar entorno virtual
-python3 -m venv .venv
-source .venv/bin/activate
+# 1. Clonar el repositorio
+git clone https://github.com/mariel84-pixel/payments_cards.git
+cd payments_cards
 
-# 2. Instalar dependencias
+# 2. Crear y activar entorno virtual
+python3 -m venv .venv
+source .venv/bin/activate        # Linux / Mac
+# .venv\Scripts\activate         # Windows
+
+# 3. Instalar dependencias
 pip install -r requirements.txt
 
-# 3. Configurar el token de Mercado Pago Sandbox
-#    Obtenerlo en: mercadopago.com.ar/developers/panel → Credenciales de prueba
+# 4. Configurar credenciales
 cp .env.example .env
-# Editar .env y reemplazar MP_ACCESS_TOKEN con tu token TEST-...
+# Abrir .env y reemplazar MP_ACCESS_TOKEN con tu token TEST-...
 
-# 4. Ejecutar los tests y generar reporte HTML
+# 5. Ejecutar los tests y generar reporte HTML
 mkdir -p reports
 pytest tests/ -v --html=reports/report.html --self-contained-html
 
-# 5. Abrir el reporte en el navegador
-xdg-open reports/report.html   # Linux
-open reports/report.html        # Mac
+# 6. Abrir el reporte en el navegador
+xdg-open reports/report.html    # Linux
+open reports/report.html         # Mac
 ```
+
+### ✅ Resultado esperado
+
+```
+7 passed, 1 xfailed
+```
+
+| Estado | Cantidad | Detalle |
+|--------|----------|---------|
+| Passed | 7 | Tests que corren y pasan correctamente |
+| Xfailed | 1 | `test_https_obligatorio` — fallo esperado si el entorno bloquea HTTP puerto 80 |
+
+> **Nota — ¿Por qué aparece `1 expected failure` (xfailed)?**
+>
+> El test `TEST_SEC_003 · test_https_obligatorio` verifica que MercadoPago redirige HTTP → HTTPS (códigos 301/302/308).
+> En entornos sandbox y en GitHub Actions, las conexiones salientes al puerto 80 suelen estar bloqueadas, lo que provoca un `ConnectTimeout` antes de recibir respuesta.
+>
+> Por eso el test está marcado con `@pytest.mark.xfail`: **le dice a pytest que este fallo es conocido y esperado** en ese entorno.
+> Un resultado `xfailed` **no es un error** — es pytest confirmando que el comportamiento coincide con lo anticipado.
+> Si alguna vez el entorno permite la conexión y la redirección llega correctamente, el test pasará como `passed`.
+>
+> En resumen: `7 passed, 1 xfailed` es el resultado correcto y exitoso de esta suite.
 
 ```
 **📋 ESTRUCTURA DEL PROYECTO**

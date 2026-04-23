@@ -1,8 +1,10 @@
 import pytest
 import os
 from dotenv import load_dotenv
+from api.payments_api import PaymentsAPI
 
 load_dotenv()
+
 
 @pytest.fixture(scope="session")
 def api_config():
@@ -15,6 +17,15 @@ def api_config():
             "X-Idempotency-Key": "test-key-001",
         },
     }
+
+
+@pytest.fixture(scope="session")
+def payments_api(api_config):
+    return PaymentsAPI(
+        base_url=api_config["base_url"],
+        headers=api_config["headers"],
+    )
+
 
 @pytest.fixture
 def valid_payment_payload():

@@ -1,5 +1,6 @@
 import pytest
 from api.payments_api import PaymentsAPI
+from tests.factories.payment_factory import PaymentFactory
 
 
 # TEST_PAY_001
@@ -22,16 +23,14 @@ def test_consultar_estado_pago(payments_api, valid_payment_payload):
 
 
 # TEST_VAL_001
-def test_monto_minimo(payments_api, valid_payment_payload):
-    payload = {**valid_payment_payload, "transaction_amount": 0}
-    response = payments_api.crear_pago(payload)
+def test_monto_minimo(payments_api, payload_monto_cero):
+    response = payments_api.crear_pago(payload_monto_cero)
     assert response.status_code == 400
 
 
 # TEST_VAL_002
-def test_email_requerido(payments_api, valid_payment_payload):
-    payload = {**valid_payment_payload, "payer": {}}
-    response = payments_api.crear_pago(payload)
+def test_email_requerido(payments_api, payload_sin_email):
+    response = payments_api.crear_pago(payload_sin_email)
     assert response.status_code == 400
 
 
@@ -61,7 +60,8 @@ def test_https_obligatorio(payments_api):
 
 # TEST_PAY_003
 def test_idempotency_key(api_config, valid_payment_payload):
-    headers = {**api_config["headers"], "X-Idempotency-Key": "idempotency-test-key-abc"}
+    idempotency_key = PaymentFactory.idempotency_key()
+    headers = {**api_config["headers"], "X-Idempotency-Key": idempotency_key}
     api = PaymentsAPI(base_url=api_config["base_url"], headers=headers)
 
     r1 = api.crear_pago(valid_payment_payload)

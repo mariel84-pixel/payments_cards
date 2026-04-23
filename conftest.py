@@ -2,6 +2,7 @@ import pytest
 import os
 from dotenv import load_dotenv
 from api.payments_api import PaymentsAPI
+from tests.factories.payment_factory import PaymentFactory
 
 load_dotenv()
 
@@ -14,7 +15,6 @@ def api_config():
         "headers": {
             "Authorization": f"Bearer {os.getenv('MP_ACCESS_TOKEN', 'TEST-token')}",
             "Content-Type": "application/json",
-            "X-Idempotency-Key": "test-key-001",
         },
     }
 
@@ -29,13 +29,14 @@ def payments_api(api_config):
 
 @pytest.fixture
 def valid_payment_payload():
-    return {
-        "transaction_amount": 100.0,
-        "token": "ff8080814c11e237014c1ff593b57b4d",
-        "description": "Test payment",
-        "installments": 1,
-        "payment_method_id": "visa",
-        "payer": {
-            "email": "test@test.com"
-        },
-    }
+    return PaymentFactory.valid_payload()
+
+
+@pytest.fixture
+def payload_sin_email():
+    return PaymentFactory.payload_sin_email()
+
+
+@pytest.fixture
+def payload_monto_cero():
+    return PaymentFactory.payload_monto_cero()

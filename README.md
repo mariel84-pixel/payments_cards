@@ -106,9 +106,9 @@ CONFIABILIDAD: Máxima
 
 | Herramienta | Versión mínima |
 |---|---|
-| Node.js | 18+ |
-| TypeScript | 5+ |
-| Playwright | 1.44+ |
+| Python | 3.11+ |
+| pytest | 8.2+ |
+| requests | 2.32+ |
 
 ## Setup
 

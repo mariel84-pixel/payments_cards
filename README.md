@@ -36,7 +36,7 @@ Mercado Pago Sandbox | Fase 1 & # MATRIZ EJECUTIVA
 
 **📍 LO QUE VAMOS A HACER (en 16 horas)**
 
-ENTREGA VIERNES 15:00:
+ENTREGA VIERNES 15:00 hs:
 
 **Entregar una suite de automatización de testing que:**
 
@@ -137,32 +137,36 @@ open reports/report.html        # Mac
 ```
 
 ```
-**📋 ESTRUCTURA DEL PROYECTO (Lo que entregas)**
-
-Carpeta del repo:
-
-
+**📋 ESTRUCTURA DEL PROYECTO**
 
 ```
-automation-suite/
+payments_cards/
+│
+├── api/
+│   ├── __init__.py
+│   └── payments_api.py                # API Object Model — cliente HTTP de MercadoPago
 │
 ├── tests/
+│   ├── factories/
+│   │   └── payment_factory.py         # Generación de payloads con Faker
+│   ├── fixtures/
+│   │   └── conftest.py                # Fixtures de pytest (api_config, payment_token, payloads)
 │   └── test_critical_path.py          # 8 casos P0 (bloqueantes)
 │
-├── .github/workflows/
-│   └── test.yml                        # Ejecución automática
+├── .github/
+│   └── workflows/
+│       └── test.yml                   # Ejecución automática en cada push
 │
-├── conftest.py                         # Fixtures compartidas
-├── requirements.txt                    # Dependencias
-├── .env.example                        # Template credenciales
+├── docs/                              # Documentación del proyecto
+├── reports/
+│   └── report.html                    # Reporte HTML generado por pytest-html
 │
-├── docs/
-│   ├── README.md                       # Setup rápido (1 página)
-│   ├── PLAN_16_HORAS.md               # Arquitectura técnica
-│   └── REPORTE_COBERTURA_TESTING.md   # 31 casos totales
-│
+├── conftest.py                        # Registro de fixtures: pytest_plugins
+├── pytest.ini                         # Configuración de pytest y logging
+├── requirements.txt                   # Dependencias
+├── .env                               # Credenciales locales (no commitear)
+├── .env.example                       # Template de credenciales
 └── .gitignore
-```
 ```
 
 📊 LOS 31 CASOS Identificados (Roadmap completo)
@@ -203,3 +207,9 @@ FASE 3 (Mes 2 - 6 casos):
 - Data validation en profundidad
 - Performance baselines
 ```
+**NOTA: GitHub Actions (test.yml) que es quien corre los tests automáticamente. Docker sería una capa extra que hoy no te agrega valor real porque:
+GitHub Actions ya te da:
+✅ Entorno limpio en cada corrida
+✅ Corre automático en cada PR
+✅ No depende de la máquina de nadie
+✅ Variables de entorno seguras con secrets

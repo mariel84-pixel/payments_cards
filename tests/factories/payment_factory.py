@@ -1,19 +1,20 @@
 import uuid
 from faker import Faker
 
+Faker.seed(0)
 fake = Faker("es_AR")
 
 
 class PaymentFactory:
 
     @staticmethod
-    def valid_payload() -> dict:
+    def valid_payload(token: str) -> dict:
         return {
             "transaction_amount": round(fake.pyfloat(min_value=1, max_value=10000, right_digits=2), 2),
-            "token": "ff8080814c11e237014c1ff593b57b4d",
+            "token": token,
             "description": fake.sentence(nb_words=4),
             "installments": fake.random_element([1, 3, 6, 12]),
-            "payment_method_id": fake.random_element(["visa", "master", "amex"]),
+            "payment_method_id": "master",
             "payer": {
                 "email": fake.email(),
                 "first_name": fake.first_name(),
@@ -23,14 +24,14 @@ class PaymentFactory:
         }
 
     @staticmethod
-    def payload_sin_email() -> dict:
-        payload = PaymentFactory.valid_payload()
-        payload["payer"] = {}
+    def payload_sin_email(token: str) -> dict:
+        payload = PaymentFactory.valid_payload(token)
+        del payload["payer"]["email"]
         return payload
 
     @staticmethod
-    def payload_monto_cero() -> dict:
-        payload = PaymentFactory.valid_payload()
+    def payload_monto_cero(token: str) -> dict:
+        payload = PaymentFactory.valid_payload(token)
         payload["transaction_amount"] = 0
         return payload
 

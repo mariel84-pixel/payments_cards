@@ -1,6 +1,47 @@
+# Credenciales — nunca subir
 .env
+
+# Entorno virtual
 .venv/
+
+# Python
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Pytest
 .pytest_cache/
+.cache/
+
+# Reportes generados
 reports/
-*.pyc
+
+# Cobertura
+.coverage
+coverage.xml
+htmlcov/
+
+# Logs
+*.log
+
+# Build / distribución
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Linters y type checkers
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS / Windows
+.DS_Store
+Thumbs.db

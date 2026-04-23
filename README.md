@@ -112,17 +112,29 @@ CONFIABILIDAD: Máxima
 
 ## Setup
 
-### 🚀 Instalación y Ejecución 
+### 🚀 Instalación y Ejecución
 
 ```bash
-# 1. Instalar dependencias
+# 1. Crear y activar entorno virtual
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 2. Instalar dependencias
 pip install -r requirements.txt
 
-# 2. Configurar variables de entorno
-echo "MP_ACCESS_TOKEN=your_token_here" > .env
+# 3. Configurar el token de Mercado Pago Sandbox
+#    Obtenerlo en: mercadopago.com.ar/developers/panel → Credenciales de prueba
+cp .env.example .env
+# Editar .env y reemplazar MP_ACCESS_TOKEN con tu token TEST-...
 
-# 3. Ejecutar la suite de tests
-pytest tests/ -v ```
+# 4. Ejecutar los tests y generar reporte HTML
+mkdir -p reports
+pytest tests/ -v --html=reports/report.html --self-contained-html
+
+# 5. Abrir el reporte en el navegador
+xdg-open reports/report.html   # Linux
+open reports/report.html        # Mac
+```
 
 ```
 **📋 ESTRUCTURA DEL PROYECTO (Lo que entregas)**

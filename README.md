@@ -128,7 +128,7 @@ Un **Access Token de prueba** de MercadoPago:
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/mariel84-pixel/payments_cards.git
+git clone -b dev https://github.com/mariel84-pixel/payments_cards.git
 cd payments_cards
 
 # 2. Crear y activar entorno virtual

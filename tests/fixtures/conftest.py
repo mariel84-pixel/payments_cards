@@ -1,11 +1,11 @@
 import pytest
 import os
 import requests as http
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from api.payments_api import PaymentsAPI
 from tests.factories.payment_factory import PaymentFactory
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 _DEFAULT_TOKEN = "TEST-token"
 
@@ -23,9 +23,9 @@ _TEST_CARD = {
 
 @pytest.fixture(scope="session")
 def api_config():
-    token = os.getenv("MP_ACCESS_TOKEN", _DEFAULT_TOKEN)
+    token = os.getenv("MP_ACCESS_TOKEN") or _DEFAULT_TOKEN
     return {
-        "base_url": os.getenv("MP_BASE_URL", "https://api.mercadopago.com"),
+        "base_url": os.getenv("MP_BASE_URL") or "https://api.mercadopago.com",
         "token": token,
         "headers": {
             "Authorization": f"Bearer {token}",

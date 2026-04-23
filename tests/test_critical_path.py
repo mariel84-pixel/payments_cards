@@ -69,6 +69,7 @@ def test_email_requerido(payments_api, payload_sin_email):
 
 # TEST_SEC_001
 @pytest.mark.smoke
+@pytest.mark.usefixtures("require_credentials")
 def test_token_requerido(payments_api, valid_payment_payload):
     log.info("Enviando request con Authorization vacío")
 
@@ -83,6 +84,7 @@ def test_token_requerido(payments_api, valid_payment_payload):
 
 # TEST_SEC_002
 @pytest.mark.smoke
+@pytest.mark.usefixtures("require_credentials")
 def test_token_invalido(payments_api, valid_payment_payload):
     log.info("Enviando request con token inválido")
 

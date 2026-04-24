@@ -163,24 +163,6 @@ open reports/report.html         # Mac
 | Passed | 7 | Tests que corren y pasan correctamente |
 | Xfailed | 1 | `test_https_obligatorio` — fallo esperado si el entorno bloquea HTTP puerto 80 |
 
-> **Nota — ¿Por qué aparece `1 expected failure` (xfailed)?**
->
-> El test `TEST_SEC_003 · test_https_obligatorio` verifica que MercadoPago redirige HTTP → HTTPS (códigos 301/302/308).
-> En entornos sandbox y en GitHub Actions, las conexiones salientes al puerto 80 suelen estar bloqueadas, lo que provoca un `ConnectTimeout` antes de recibir respuesta.
->
-> Por eso el test está marcado con `@pytest.mark.xfail`: **le dice a pytest que este fallo es conocido y esperado** en ese entorno.
-> Un resultado `xfailed` **no es un error** — es pytest confirmando que el comportamiento coincide con lo anticipado.
-> Si alguna vez el entorno permite la conexión y la redirección llega correctamente, el test pasará como `passed`.
->
-> En resumen: `7 passed, 1 xfailed` es el resultado correcto y exitoso de esta suite.
-
-> **Nota 2 — Cuotas definidas dentro de la Factory**
->
-> Para esta entrega, definí las cuotas dentro de la Factory para asegurar que los payloads sean realistas.
-> Sin embargo, soy consciente de que esto introduce un acoplamiento de reglas de negocio.
-> En un entorno productivo real, mi propuesta sería extraer estos valores a un archivo de configuración (Data-Driven) o,
-> mejor aún, parametrizar la fábrica para que consuma las cuotas válidas directamente desde un endpoint de
-> configuración de la API, evitando así el mantenimiento manual si las condiciones comerciales cambian.
 
 ```
 **📋 ESTRUCTURA DEL PROYECTO**
@@ -259,3 +241,37 @@ GitHub Actions ya te da:
 ✅ Corre automático en cada PR
 ✅ No depende de la máquina de nadie
 ✅ Variables de entorno seguras con secrets
+
+ **Nota 1— ¿Por qué aparece `1 expected failure` (xfailed)?**
+>
+> El test `TEST_SEC_003 · test_https_obligatorio` verifica que MercadoPago redirige HTTP → HTTPS (códigos 301/302/308).
+> En entornos sandbox y en GitHub Actions, las conexiones salientes al puerto 80 suelen estar bloqueadas, lo que provoca un `ConnectTimeout` antes de recibir respuesta.
+>
+> Por eso el test está marcado con `@pytest.mark.xfail`: **le dice a pytest que este fallo es conocido y esperado** en ese entorno.
+> Un resultado `xfailed` **no es un error** — es pytest confirmando que el comportamiento coincide con lo anticipado.
+> Si alguna vez el entorno permite la conexión y la redirección llega correctamente, el test pasará como `passed`.
+>
+> En resumen: `7 passed, 1 xfailed` es el resultado correcto y exitoso de esta suite.
+
+> **Nota 2 — ¿Por qué el detalle de `test_https_obligatorio` muestra un stack trace tan largo?**
+>
+> Al expandir ese test en el reporte HTML vas a ver decenas de líneas de código interno de `urllib3` y `requests`.
+> Eso **no es un bug del test** — es el traceback completo de la excepción `ConnectTimeout` que pytest captura automáticamente.
+>
+> Lo que pasó en una sola línea: el test intentó conectarse a `api.mercadopago.com` por el **puerto 80 (HTTP)**,
+> el entorno bloqueó esa conexión (sandbox y GitHub Actions bloquean salida en puerto 80),
+> y después de 10 segundos de espera la librería lanzó `ConnectTimeoutError → MaxRetryError → ConnectTimeout`.
+>
+> Cada línea del stack trace es un nivel interno de la librería atravesado hasta llegar al error raíz.
+> El test está marcado con `@pytest.mark.xfail(raises=ConnectTimeout)` justamente porque este comportamiento
+> es esperado: **xfailed significa que el test falló de la forma que predijimos**, lo cual es un resultado correcto.
+> El stack trace largo es información de diagnóstico — no indica que algo esté mal en el código.
+
+> **Nota 3 — Cuotas definidas dentro de la Factory**
+>
+> Para esta entrega, definí las cuotas dentro de la Factory para asegurar que los payloads sean realistas.
+> Sin embargo, soy consciente de que esto introduce un acoplamiento de reglas de negocio.
+> En un entorno productivo real, mi propuesta sería extraer estos valores a un archivo de configuración (Data-Driven) o,
+> mejor aún, parametrizar la fábrica para que consuma las cuotas válidas directamente desde un endpoint de
+> configuración de la API, evitando así el mantenimiento manual si las condiciones comerciales cambian.
+

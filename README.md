@@ -174,6 +174,14 @@ open reports/report.html         # Mac
 >
 > En resumen: `7 passed, 1 xfailed` es el resultado correcto y exitoso de esta suite.
 
+> **Nota 2 — Cuotas definidas dentro de la Factory**
+>
+> Para esta entrega, definí las cuotas dentro de la Factory para asegurar que los payloads sean realistas.
+> Sin embargo, soy consciente de que esto introduce un acoplamiento de reglas de negocio.
+> En un entorno productivo real, mi propuesta sería extraer estos valores a un archivo de configuración (Data-Driven) o,
+> mejor aún, parametrizar la fábrica para que consuma las cuotas válidas directamente desde un endpoint de
+> configuración de la API, evitando así el mantenimiento manual si las condiciones comerciales cambian.
+
 ```
 **📋 ESTRUCTURA DEL PROYECTO**
 

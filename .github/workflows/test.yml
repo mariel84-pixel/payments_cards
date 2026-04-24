@@ -25,7 +25,9 @@ jobs:
         env:
           MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
           MP_BASE_URL: ${{ secrets.MP_BASE_URL }}
-        run: pytest tests/ -v --html=reports/report.html --self-contained-html
+        run: |
+          mkdir -p reports
+          pytest tests/ -v --html=reports/report.html --self-contained-html
 
       - name: Upload report
         if: always()

@@ -34,7 +34,7 @@ Mercado Pago Sandbox | Fase 1 & # MATRIZ EJECUTIVA
 
     🎯 Deployments lentos y con incertidumbre
 
-**📍 LO QUE VAMOS A HACER (en 16 horas)**
+**📍 LO QUE VAMOS A HACER (en 8 horas)**
 
 ENTREGA VIERNES 15:00 hs:
 
